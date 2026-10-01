@@ -6,6 +6,9 @@
 venv_dir="$install_dir/venv"
 # $data_dir is provisioned automatically by the manifest's [resources.data_dir]
 
+# ynh_add_nginx_config (helpers v1, YunoHost 12.x) reads $path_url, not $path.
+path_url="$path"
+
 #=================================================
 # PERSONAL HELPERS
 #=================================================

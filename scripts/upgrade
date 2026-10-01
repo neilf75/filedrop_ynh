@@ -7,13 +7,14 @@ source /usr/share/yunohost/helpers
 # STOP SERVICE
 #=================================================
 
-ynh_systemctl --service=$app --action=stop
+ynh_systemd_action --service_name=$app --action=stop
 
 #=================================================
 # REFRESH APP SOURCE
 #=================================================
 
 mkdir -p "$data_dir/blobs"
+mkdir -p "/var/log/$app"
 
 ynh_secure_remove --file="$install_dir" --force
 mkdir -p "$install_dir"
@@ -29,16 +30,17 @@ filedrop_install_dependencies
 # SYSTEM CONFIGURATION
 #=================================================
 
-ynh_config_add_systemd
-ynh_config_add_nginx
-ynh_config_add_logrotate
+ynh_add_systemd_config
+ynh_add_nginx_config
+ynh_use_logrotate
 
 chown -R $app:www-data "$install_dir"
 chown -R $app:$app "$data_dir"
 chmod 750 "$data_dir"
+chown $app:$app "/var/log/$app"
 
 #=================================================
 # RESTART APP
 #=================================================
 
-ynh_systemctl --service=$app --action=start --log_path="systemd" --line_match="Listening at"
+ynh_systemd_action --service_name=$app --action=start --log_path="/var/log/$app/$app.log" --line_match="Listening at" --timeout=60

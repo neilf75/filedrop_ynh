@@ -4,10 +4,11 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# CREATE DATA DIRECTORY
+# CREATE DATA AND LOG DIRECTORIES
 #=================================================
 
 mkdir -p "$data_dir/blobs"
+mkdir -p "/var/log/$app"
 
 #=================================================
 # COPY APP SOURCE
@@ -25,9 +26,8 @@ filedrop_install_dependencies
 # SYSTEM CONFIGURATION
 #=================================================
 
-ynh_config_add_systemd
-
-ynh_config_add_nginx
+ynh_add_systemd_config
+ynh_add_nginx_config
 
 #=================================================
 # PERMISSIONS
@@ -36,12 +36,13 @@ ynh_config_add_nginx
 chown -R $app:www-data "$install_dir"
 chown -R $app:$app "$data_dir"
 chmod 750 "$data_dir"
+chown $app:$app "/var/log/$app"
 
 #=================================================
 # LOGROTATE
 #=================================================
 
-ynh_config_add_logrotate
+ynh_use_logrotate
 
 #=================================================
 # START APP
@@ -49,5 +50,4 @@ ynh_config_add_logrotate
 
 yunohost service add $app --description="FileDrop ephemeral file transfer" --log="/var/log/$app/$app.log"
 
-ynh_systemctl --service=$app --action=enable
-ynh_systemctl --service=$app --action=start --log_path="systemd" --line_match="Listening at"
+ynh_systemd_action --service_name=$app --action=start --log_path="/var/log/$app/$app.log" --line_match="Listening at" --timeout=60

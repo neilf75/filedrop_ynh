@@ -16,7 +16,7 @@ Restart=on-failure
 RestartSec=5
 
 StandardOutput=append:/var/log/__APP__/__APP__.log
-StandardError=inherit
+StandardError=append:/var/log/__APP__/__APP__.log
 
 [Install]
 WantedBy=multi-user.target
