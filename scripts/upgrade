@@ -16,7 +16,7 @@ ynh_systemd_action --service_name=$app --action=stop
 mkdir -p "$data_dir/blobs"
 mkdir -p "/var/log/$app"
 
-ynh_secure_remove --file="$install_dir" --force
+ynh_secure_remove --file="$install_dir"
 mkdir -p "$install_dir"
 cp -ar "$YNH_APP_BASEDIR/sources/filedrop/." "$install_dir/"
 
