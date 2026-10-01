@@ -27,7 +27,7 @@ function formatAge(uploadedAtSeconds) {
 }
 
 async function loadMe() {
-  const res = await fetch("/api/me");
+  const res = await fetch("api/me");
   if (!res.ok) {
     whoamiEl.textContent = "Not logged in";
     return;
@@ -37,7 +37,7 @@ async function loadMe() {
 }
 
 async function refreshFiles() {
-  const res = await fetch("/api/files");
+  const res = await fetch("api/files");
   if (!res.ok) return;
   const files = await res.json();
   renderFiles(files);
@@ -79,7 +79,7 @@ function renderFiles(files) {
 }
 
 async function downloadFile(file) {
-  const res = await fetch(`/api/files/${file.id}/download`);
+  const res = await fetch(`api/files/${file.id}/download`);
   if (!res.ok) {
     alert("This file is no longer available (maybe already downloaded elsewhere).");
     refreshFiles();
@@ -98,7 +98,7 @@ async function downloadFile(file) {
 }
 
 async function deleteFile(fileId) {
-  await fetch(`/api/files/${fileId}`, { method: "DELETE" });
+  await fetch(`api/files/${fileId}`, { method: "DELETE" });
   refreshFiles();
 }
 
@@ -125,7 +125,7 @@ function uploadFile(file) {
     }
   });
 
-  xhr.open("POST", "/api/upload");
+  xhr.open("POST", "api/upload");
   xhr.send(formData);
 }
 
