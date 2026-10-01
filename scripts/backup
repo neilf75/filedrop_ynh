@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+ynh_backup --src_path="$install_dir"
+ynh_backup --src_path="$data_dir"
+
+ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+ynh_backup --src_path="/etc/systemd/system/$app.service"
+ynh_backup --src_path="/etc/logrotate.d/$app" --not_mandatory

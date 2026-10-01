@@ -1,0 +1,44 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# STOP SERVICE
+#=================================================
+
+ynh_systemctl --service=$app --action=stop
+
+#=================================================
+# REFRESH APP SOURCE
+#=================================================
+
+mkdir -p "$data_dir/blobs"
+
+ynh_secure_remove --file="$install_dir" --force
+mkdir -p "$install_dir"
+cp -ar "$YNH_APP_BASEDIR/sources/filedrop/." "$install_dir/"
+
+#=================================================
+# PYTHON VIRTUALENV
+#=================================================
+
+filedrop_install_dependencies
+
+#=================================================
+# SYSTEM CONFIGURATION
+#=================================================
+
+ynh_config_add_systemd
+ynh_config_add_nginx
+ynh_config_add_logrotate
+
+chown -R $app:www-data "$install_dir"
+chown -R $app:$app "$data_dir"
+chmod 750 "$data_dir"
+
+#=================================================
+# RESTART APP
+#=================================================
+
+ynh_systemctl --service=$app --action=start --log_path="systemd" --line_match="Listening at"

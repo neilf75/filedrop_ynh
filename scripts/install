@@ -1,0 +1,53 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# CREATE DATA DIRECTORY
+#=================================================
+
+mkdir -p "$data_dir/blobs"
+
+#=================================================
+# COPY APP SOURCE
+#=================================================
+
+cp -ar "$YNH_APP_BASEDIR/sources/filedrop/." "$install_dir/"
+
+#=================================================
+# PYTHON VIRTUALENV
+#=================================================
+
+filedrop_install_dependencies
+
+#=================================================
+# SYSTEM CONFIGURATION
+#=================================================
+
+ynh_config_add_systemd
+
+ynh_config_add_nginx
+
+#=================================================
+# PERMISSIONS
+#=================================================
+
+chown -R $app:www-data "$install_dir"
+chown -R $app:$app "$data_dir"
+chmod 750 "$data_dir"
+
+#=================================================
+# LOGROTATE
+#=================================================
+
+ynh_config_add_logrotate
+
+#=================================================
+# START APP
+#=================================================
+
+yunohost service add $app --description="FileDrop ephemeral file transfer" --log="/var/log/$app/$app.log"
+
+ynh_systemctl --service=$app --action=enable
+ynh_systemctl --service=$app --action=start --log_path="systemd" --line_match="Listening at"

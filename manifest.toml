@@ -1,0 +1,54 @@
+packaging_format = 2
+
+id = "filedrop"
+name = "FileDrop"
+description.en = "Ephemeral file transfer between your own logged-in browser sessions"
+description.fr = "Transfert de fichier éphémère entre vos sessions connectées"
+
+version = "1.0.0~ynh1"
+
+maintainers = []
+
+[upstream]
+license = "MIT"
+# Bespoke app, no external upstream project.
+
+[integration]
+yunohost = ">= 11.2"
+architectures = "all"
+multi_instance = false
+ldap = false
+sso = true
+disk = "50M"
+ram.build = "50M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/filedrop"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "all_users"
+    help.en = "Only logged-in users in this group can use FileDrop. Each user only ever sees files they uploaded themselves."
+
+[resources]
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.data_dir]
+
+    [resources.permissions]
+    main.url = "/"
+    main.show_tile = true
+
+    [resources.ports]
+    main.default = 6500
+
+    [resources.apt]
+    packages = "python3-venv"

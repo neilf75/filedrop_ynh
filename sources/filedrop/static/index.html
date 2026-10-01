@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FileDrop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>FileDrop</h1>
+  <span id="whoami" class="whoami"></span>
+</header>
+
+<main>
+  <section id="drop-zone" class="drop-zone">
+    <p>Drag a file here, or</p>
+    <label class="button">
+      Choose file
+      <input type="file" id="file-input" hidden>
+    </label>
+    <div id="upload-progress" class="progress hidden">
+      <div class="progress-bar" id="upload-progress-bar"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Available to download</h2>
+    <p class="hint">Files you've uploaded, visible on any browser you're logged into. Downloading deletes the file from the server.</p>
+    <ul id="file-list" class="file-list"></ul>
+    <p id="empty-hint" class="hint">No files waiting right now.</p>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
