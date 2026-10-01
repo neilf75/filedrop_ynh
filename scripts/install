@@ -45,6 +45,16 @@ chown $app:$app "/var/log/$app"
 ynh_use_logrotate
 
 #=================================================
+# SET APP LOGO
+#=================================================
+
+# Non-catalog apps don't get a portal icon for free (that only happens for
+# apps listed in YunoHost's official catalog, via its own logos/ folder) -
+# this registers the icon bundled in the package as the main permission's
+# logo, which is what the self-service portal actually reads.
+yunohost user permission update "$app.main" --logo="$YNH_APP_BASEDIR/logo.png"
+
+#=================================================
 # START APP
 #=================================================
 
